@@ -23,7 +23,6 @@
 
     <main>
         <section class="gallery grid-container">
-            <!-- js render -->
         </section>
 
         <section class="meme-container flex column hidden">
@@ -39,7 +38,6 @@
                     <button class="add-line" onclick="onAddLine()">+</button>
                     <button class="switch-line" onclick="onSwitchLine()">switch line</button>
                     <div class="text-edit-container">
-                        <!-- <button onclick="deleteTxt()"><i class="fas fa-eraser"></i></button> -->
                          <input type="range" value="40" min="10" step="2"
                             data-key="size" oninput="onEditTxt(this)">
                         <input type="color" value="" data-key="color" oninput="onEditTxt(this)">
@@ -56,7 +54,6 @@
                             <option value="right">right</option>
                         </select>
                     </div>
-                    <!-- <i class="fas fa-text-height"></i> -->
                     <div class="position-container"> position
                         <div class="width-selection"> position-X
                             <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">+</button>
@@ -77,17 +74,7 @@
                             oninput="onEditTxt(this)">
                         <input type="color" value="${txt.strokeStyle}" data-key="strokeStyle" oninput="onEditTxt(this)">
                     </div>
-                    <!-- <div>
 
-                        <input id="shadow" type="checkbox" data-property="isShadow" onclick="editTxt(this)">
-                        <label for="shadow">Shadow</label>
-                        <input type="color" value="" data-property="shadowColor" oninput="editTxt(this)">
-                        <i class="fas fa-arrows-alt-h"></i> <input type="number" value="" step="1"
-                            data-property="shadowOffsetX" oninput="editTxt(this)">
-                        <i class="fas fa-arrows-alt-v"></i><input type="number" value="${txt.shadowOffsetY}" step="1"
-                            data-property="shadowOffsetY" oninput="editTxt(this)">
-                        Blur: <input type="number" value="" data-property="shadowBlur" oninput="editTxt(this)">
-                    </div> -->
                     <div class="save-btns flex">
                         <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
                             <i class="fas fa-cloud-download-alt"></i> Download</a>
@@ -99,7 +86,6 @@
                 </div>
 
             </div>
-
 
 
         </section>
