@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Cris's Memes</title>
+</head>
+
+<body onload="init()">
+
+    <header class="main-header flex space-between">
+            <h1>Meme Generator</h1>
+            <nav class="main-nav flex space-between">
+                <ul class="main-nav flex space-between clean-list align-center">
+                    <li class="nav-gallery"><a href="">gallery</a></li>
+                    <li class="my-memes"><a href="">my-memes</a></li>
+                    <li class="about"><a href="">about</a></li>
+                </ul>
+            </nav>
+    </header>
+
+    <main>
+
+        <div>
+            <section class="gallery grid-container">
+                <!-- js render -->
+            </section>
+
+            <section class="meme-container hidden">
+                <button onclick="toggleView()">
+                    <i class="fas fa-times"></i> Back to Gallery
+                </button>
+
+                <div class="meme-control">
+                    <canvas id="meme-canvas" width="400" height="400"></canvas>
+
+                    <div class="txts-list">
+                        <!-- js render -->
+                    </div>
+                </div>
+
+                <button onclick="newTxtBtnClicked()">
+                    <i class="fas fa-plus"></i> Add Line
+                </button>
+                <a id="dl" download="meme.png" href="#" onclick="dlCanvas(this)">
+                    <span>
+                        <i class="fas fa-cloud-download-alt"></i> Download
+                    </span>
+                </a>
+
+            </section>
+
+            <section class="contact">
+
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a7c8057fcc.js" crossorigin="anonymous"></script>
+
+    <script src="js/util-service.js"></script>
+    <script src="js/meme-service.js"></script>
+    <script src="js/meme-controller.js"></script>
+</body>
+
+</html>
