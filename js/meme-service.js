@@ -36,22 +36,16 @@ function editTxt(elInput) {
         case 'select-one':
             value = elInput.options[elInput.selectedIndex].value;
             break;
-        // case 'checkbox':
-        //     value = elInput.checked;
-        //     break;
-        default: // text, number
+        default: 
             value = elInput.value;
             break;
     }
-    console.log("editTxt -> gMeme.selectedLineIdx", gMeme.selectedLineIdx)
     gMeme.lines[gMeme.selectedLineIdx][key] = value;
 
 }
 
 function setLineIdx(idx) {
-    gMeme.selectedLineIdx = idx;
-    console.log("setLineIdx -> gMeme.selectedLineIdx", gMeme.selectedLineIdx)
-    
+    gMeme.selectedLineIdx = idx; 
 }
 
 
@@ -61,21 +55,12 @@ function addLine(txt = 'Enter your text here', x, y) {
         txt,
         size: 40,
         align: 'center',
-        color: '#000000', // in color picker, if choosing color from platte notice it stays "solid".
+        color: '#000000', 
         fontFamily: 'Impact',
-        isOutline: true,
-        lineWidth: 2, // outline width
-        strokeStyle: '#ffffff',
-        isShadow: false,
-        shadowColor: '#000000',
-        shadowOffsetX: 1,
-        shadowOffsetY: 1,
-        shadowBlur: 0,
-        x: x,
-        y: y
+        x,
+        y
     };
     gMeme.lines.push(line)
-    console.log("addLine -> gMeme.lines", gMeme.lines)
 
 }
 
@@ -88,8 +73,6 @@ function _createMeme(imgId) {
     gMeme = meme;
     addLine('text', 150, 50);
 };
-// _createline('Your Text', 150, 70)
-
 
 
 function _createImgs() {
