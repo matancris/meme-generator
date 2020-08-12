@@ -11,36 +11,56 @@ function getImagesForDisplay() {
     return gImgs;
 }
 
-function getImgById(imgId){
-    return gImgs.find((img)=> img.id === imgId);
+function createMeme(imgId) {
+    _createMeme(imgId);
+}
+
+function getImgById(imgId) {
+    return gImgs.find((img) => img.id === imgId);
+}
+
+function getLineByIdx() {
+    return gMeme.lines[gMeme.lines.length - 1];
+}
+
+function getMeme() {
+    return gMeme;
 }
 
 
-function getImgSrc() {
-    // imgIdx needed to find img src url in gImg[]
-    var imgIdx = gImgs.findIndex(function (img) {
-        return gMeme.selectedImgId === img.id;
-    });
+function editTxt(elInput) {
+    var key = elInput.dataset.key;
+    var value;
 
-    return gImgs[imgIdx].url;
-}
-
-
-function _createMeme(imgId) {
-    return {
-        selectedImgId: imgId,
-        selectedLineIdx: 0,
-        lines: [_createTxt('Your Text', 150, 70), _createTxt('Your Text', 150, 70)]
+    switch (elInput.type) {
+        case 'select-one':
+            value = elInput.options[elInput.selectedIndex].value;
+            break;
+        // case 'checkbox':
+        //     value = elInput.checked;
+        //     break;
+        default: // text, number
+            value = elInput.value;
+            break;
     }
-};
+    console.log("editTxt -> gMeme.selectedLineIdx", gMeme.selectedLineIdx)
+    gMeme.lines[gMeme.selectedLineIdx][key] = value;
+
+}
+
+function setLineIdx(idx) {
+    gMeme.selectedLineIdx = idx;
+    console.log("setLineIdx -> gMeme.selectedLineIdx", gMeme.selectedLineIdx)
+    
+}
 
 
-function _createTxt(txt, x, y) {
-    return {
-        //object txt = {property:value}
+
+function addLine(txt = 'Enter your text here', x, y) {
+    var line = {
         txt,
         size: 40,
-        align: 'left',
+        align: 'center',
         color: '#000000', // in color picker, if choosing color from platte notice it stays "solid".
         fontFamily: 'Impact',
         isOutline: true,
@@ -54,24 +74,38 @@ function _createTxt(txt, x, y) {
         x: x,
         y: y
     };
+    gMeme.lines.push(line)
+    console.log("addLine -> gMeme.lines", gMeme.lines)
+
 }
+
+function _createMeme(imgId) {
+    let meme = {
+        selectedImgId: imgId,
+        selectedLineIdx: 0,
+        lines: []
+    }
+    gMeme = meme;
+    addLine('text', 150, 50);
+};
+// _createline('Your Text', 150, 70)
+
 
 
 function _createImgs() {
     var imgs = [];
 
     imgs.push(
-        _createImage('/img/1.jpg', ['fun']),
-        _createImage('/img/3.jpg', ['happy']),
-        _createImage('/img/4.jpg', ['happy']),
-        _createImage('/img/5.jpg', ['happy']),
-        _createImage('/img/6.jpg', ['happy']),
-        _createImage('/img/7.jpg', ['happy']),
-        _createImage('/img/8.jpg', ['happy']),
-        _createImage('/img/9.jpg', ['happy']),
-        _createImage('/img/10.jpg', ['happy']),
-        _createImage('/img/11.jpg', ['sad']));
-console.log(imgs);
+        _createImage('./img/1.jpg', ['fun']),
+        _createImage('./img/3.jpg', ['happy']),
+        _createImage('./img/4.jpg', ['happy']),
+        _createImage('./img/5.jpg', ['happy']),
+        _createImage('./img/6.jpg', ['happy']),
+        _createImage('./img/7.jpg', ['happy']),
+        _createImage('./img/8.jpg', ['happy']),
+        _createImage('./img/9.jpg', ['happy']),
+        _createImage('./img/10.jpg', ['happy']),
+        _createImage('./img/11.jpg', ['sad']));
     return imgs;
 }
 
@@ -82,3 +116,19 @@ function _createImage(url, keywords) {
         keywords
     };
 }
+
+function downloadImg(elLink) {
+    var imgContent = gCanvas.toDataURL('image/jpeg');
+    elLink.href = imgContent
+}
+
+
+
+// function getImgSrc() {
+//     // imgIdx needed to find img src url in gImg[]
+//     var imgIdx = gImgs.findIndex(function (img) {
+//         return gMeme.selectedImgId === img.id;
+//     });
+
+//     return gImgs[imgIdx].url;
+// }

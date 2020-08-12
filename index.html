@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,65 +9,114 @@
 </head>
 
 <body onload="init()">
-
+<div class="main-grid">
     <header class="main-header flex space-between">
-            <h1>Meme Generator</h1>
-            <nav class="main-nav flex space-between">
-                <ul class="main-nav flex space-between clean-list align-center">
-                    <li class="nav-gallery"><a href="">gallery</a></li>
-                    <li class="my-memes"><a href="">my-memes</a></li>
-                    <li class="about"><a href="">about</a></li>
-                </ul>
-            </nav>
+        <h1>Meme Generator</h1>
+        <nav class="main-nav flex space-between">
+            <ul class="main-nav flex space-between clean-list align-center">
+                <li class="nav-gallery"><a href="">gallery</a></li>
+                <li class="my-memes"><a href="">my-memes</a></li>
+                <li class="about"><a href="">about</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
+        <section class="gallery grid-container">
+            <!-- js render -->
+        </section>
 
-        <div>
-            <section class="gallery grid-container">
-                <!-- js render -->
-            </section>
+        <section class="meme-container flex column hidden">
+            <button onclick="toggleView()">
+                <i class="fas fa-times"></i> Back to Gallery
+            </button>
 
-            <section class="meme-container hidden">
-                <button onclick="toggleView()">
-                    <i class="fas fa-times"></i> Back to Gallery
-                </button>
+            <div class="meme-control flex space-around">
+                <canvas id="meme-canvas" width="400" height="400"></canvas>
 
-                <div class="meme-control">
-                    <canvas id="meme-canvas" width="400" height="400"></canvas>
+                <div class="txt-editor flex column space-between">
+                    <input class="txt-input" type="text" data-key="txt" placeholder="Write your text here" oninput="onEditTxt(this)">
+                    <button class="add-line" onclick="onAddLine()">+</button>
+                    <button class="switch-line" onclick="onSwitchLine()">switch line</button>
+                    <div class="text-edit-container">
+                        <!-- <button onclick="deleteTxt()"><i class="fas fa-eraser"></i></button> -->
+                         <input type="range" value="40" min="10" step="2"
+                            data-key="size" oninput="onEditTxt(this)">
+                        <input type="color" value="" data-key="color" oninput="onEditTxt(this)">
 
-                    <div class="txts-list">
-                        <!-- js render -->
+                        <select data-key="fontFamily" oninput="onEditTxt(this)">
+                            <option value="Impact">Impact</option>
+                            <option value="Tahoma">Tahoma</option>
+                            <option value="Ariel">Ariel</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <select data-key="align" oninput="onEditTxt(this)">
+                            <option value="left">left</option>
+                            <option value="center">center</option>
+                            <option value="right">right</option>
+                        </select>
+                    </div>
+                    <!-- <i class="fas fa-text-height"></i> -->
+                    <div class="position-container"> position
+                        <div class="width-selection"> position-X
+                            <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">+</button>
+                            <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">-</button>
+                        </div>
+                        <div class="height-selection"> position-Y
+                            <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">+</button>
+                            <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">-</button>
+                        </div>
+
+                       
+                    </div>
+
+                    <div>
+                        <input id="outline" type="checkbox" data-key="isOutline" checked onclick="onEditTxt(this)">
+                        <label for="outline">Outline</label>
+                        Width: <input type="number" value="" min="0" step="1" data-key="lineWidth"
+                            oninput="onEditTxt(this)">
+                        <input type="color" value="${txt.strokeStyle}" data-key="strokeStyle" oninput="onEditTxt(this)">
+                    </div>
+                    <!-- <div>
+
+                        <input id="shadow" type="checkbox" data-property="isShadow" onclick="editTxt(this)">
+                        <label for="shadow">Shadow</label>
+                        <input type="color" value="" data-property="shadowColor" oninput="editTxt(this)">
+                        <i class="fas fa-arrows-alt-h"></i> <input type="number" value="" step="1"
+                            data-property="shadowOffsetX" oninput="editTxt(this)">
+                        <i class="fas fa-arrows-alt-v"></i><input type="number" value="${txt.shadowOffsetY}" step="1"
+                            data-property="shadowOffsetY" oninput="editTxt(this)">
+                        Blur: <input type="number" value="" data-property="shadowBlur" oninput="editTxt(this)">
+                    </div> -->
+                    <div class="save-btns flex">
+                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
+                            <i class="fas fa-cloud-download-alt"></i> Download</a>
+                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
+                            Save</a>
+                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
+                            Share</a>
                     </div>
                 </div>
 
-                <button onclick="newTxtBtnClicked()">
-                    <i class="fas fa-plus"></i> Add Line
-                </button>
-                <a id="dl" download="meme.png" href="#" onclick="dlCanvas(this)">
-                    <span>
-                        <i class="fas fa-cloud-download-alt"></i> Download
-                    </span>
-                </a>
+            </div>
 
-            </section>
 
-            <section class="contact">
 
-            </section>
-        </div>
+        </section>
     </main>
 
     <footer>
         <div class="container">
+            footer
         </div>
     </footer>
-
+</div>
     <script src="https://kit.fontawesome.com/a7c8057fcc.js" crossorigin="anonymous"></script>
 
     <script src="js/util-service.js"></script>
     <script src="js/meme-service.js"></script>
     <script src="js/meme-controller.js"></script>
+
 </body>
 
 </html>

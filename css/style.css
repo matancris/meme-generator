@@ -19,31 +19,37 @@
     src: url(/fonts/lato/Lato-Bold.ttf);
 }
 
-
 /* BASE */
 
 html {
-    font-family:  serif;
+    font-family: Impact, sans-serif;
     line-height: 1.7;
-    
     color: #626262;
 }
 
-header{
-    background-color: #ccc;
+header {
+    grid-column: span 2;
+    background-color: #5970c1;
+    background-image: linear-gradient(-86deg, #33be6d 0%, #0c98b9 100%);
 }
 
-nav{
+nav {
     width: 50%;
 }
 
-ul{
+ul {
     width: 100%;
 }
 
 body {
     font-size: 0.875rem;
     margin: 0;
+    height: 100vh;
+}
+
+main {
+    width: 100%;
+    grid-column: span 2;
 }
 
 img {
@@ -73,6 +79,7 @@ a:hover {
     color: #000;
 }
 
+
 /* LAYOUT */
 
 .container {
@@ -82,15 +89,19 @@ a:hover {
     padding: 0 1.2rem;
 }
 
-
 /* COMPONENTS */
-
-
 
 /* header */
 
-
 /* main */
+
+.main-grid{
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 4fr 1fr;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -98,8 +109,56 @@ a:hover {
     padding: 10px;
 }
 
+.meme-container{
+    height: 100%;
+    background-color: #22252c;
+}
+
+.meme-container > *{
+justify-self: center;
+align-self: center;
+}
+
+.meme-control{
+    width: 100%;
+    height: 100%
+}
+
 #meme-canvas {
     border: 2px solid black;
+}
+
+.txt-editor {
+    height: 70%;
+    background-color: #ccc;
+    justify-self: center;
+    align-self: center;
+ 
+}
+
+.txt-editor>* {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 10px;
+    font-size: 1.5rem;
+}
+
+.text-edit-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    border-radius: 15px;
+    background-color: #19a59f;
+}
+.text-edit-container > * {
+    align-self: center;
+    justify-self: center;
+}
+
+.save-btns {
+    justify-content: space-between;
 }
 
 /* HELPERS */
@@ -114,6 +173,11 @@ a:hover {
     justify-content: space-between;
 }
 
+.space-around {
+    justify-content: space-around;
+    align-items: center;
+}
+
 .justify-center {
     justify-content: center;
 }
@@ -124,6 +188,10 @@ a:hover {
 
 .column {
     flex-direction: column;
+}
+
+.flex-1 {
+    flex-grow: 1;
 }
 
 /* list-helpers */
@@ -145,22 +213,19 @@ a:hover {
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
-
     transition: opacity .8s;
 }
 
 /* hide-helpers */
 
-.hidden{
+.hidden {
     display: none;
 }
-
 
 /* margin-helpers */
 
 .margin-bottom {
     margin-bottom: 5rem;
 }
-
 
 /*---- Media Queries ----*/
