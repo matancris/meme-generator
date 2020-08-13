@@ -202,6 +202,9 @@ function renderImgs(imgs) {
 }
 
 
+// *****CANVAS EVENTS*****//
+
+
 function onCanvasDown(ev) {
     const { offsetX, offsetY } = ev;
     var meme = getMeme()
@@ -223,11 +226,9 @@ function onCanvasDown(ev) {
     })
 }
 
-
 function onCanvasUp() {
     gIsMouseDown = false;
 }
-
 
 function onCanvasMove(ev) {
     if (!gIsMouseDown) return;
