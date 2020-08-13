@@ -1,9 +1,9 @@
 'use strict';
 
-
+const MEMES_KEY = 'myMemes';
 var gMeme;
+var gMemes = [];
 var gImgs = _createImgs();
-let gNextId = 0;
 
 
 
@@ -50,8 +50,18 @@ function editTxt(elInput) {
 
 function setLineIdx(idx) {
     gMeme.selectedLineIdx = idx;
-    console.log("setLineIdx -> gMeme.selectedLineIdx", gMeme.selectedLineIdx)
-    
+}
+
+function deleteLine() {
+    gMeme.lines.splice(gMeme.selectedLineIdx, 1);
+    gMeme.selectedStckrIdx = 0;
+}
+
+function setNewLinePos(line, newX, newY) {
+    console.log("setNewLinePos -> newY", newY)
+    console.log("setNewLinePos -> newX", newX)
+    line.x = newX
+    line.y = newY
 }
 
 
@@ -79,6 +89,11 @@ function addLine(txt = 'Enter your text here', x, y) {
 
 }
 
+function saveMeme() {
+    gMemes.push(gMeme);
+    saveToStorage(MEMES_KEY, gMemes)
+}
+
 function _createMeme(imgId) {
     let meme = {
         selectedImgId: imgId,
@@ -86,7 +101,7 @@ function _createMeme(imgId) {
         lines: []
     }
     gMeme = meme;
-    addLine('text', 150, 50);
+    addLine('Text', 200, 70);
 };
 // _createline('Your Text', 150, 70)
 

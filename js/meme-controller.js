@@ -4,7 +4,7 @@
 var gCanvas = document.getElementById('meme-canvas');
 console.log("gCanvas", gCanvas)
 var gCtx = gCanvas.getContext('2d');
-// var gImgObj;
+var gIsMouseDown = false;
 
 
 function init() {
@@ -29,6 +29,18 @@ function renderCanvas() {
     gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
     meme.lines.map(line => drawTxt(line))
 }
+
+// function onMySavedMemes(){
+//     var memes = getSavedMemes();
+//     memes.map(meme => {
+//         img = getImgById(meme.selectedImgId);
+//         gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
+//         meme.lines.map(line => drawTxt(line))
+//         //  `
+//         // <div class="img-container"><img id='${img.id}' src='${img.url}' onclick="onOpenMemeEditor('${img.id}',this)" alt='meme picture'/></div>
+//         // `  
+//     })
+// }
 
 
 // drawImg(img, meme)
@@ -148,25 +160,15 @@ function drawTxt(line) {
 //     gCtx.strokeText(txt.line, txt.x, txt.y);
 // }
 
-/**
- * editTxt() gets changes for txt and update gMeme model.
- * Update gMeme.txts[].txt = {property:value}
- * Redraws canvas.
- * Input types: text, number, checkbox, dropdown.
- * 
- *  txtIdx - the specific txt to change in []. it's line num -1 because idx starts with 0.
- *  property - (using data-* attributes) ex. line, size, align, color, isShadow.. 
- *  value - ex. 'text', 30, left, red, true..
- */
+function onSave() {
+    saveMeme()
+}
 
 
-function renderTxtsEditor(line) {
-    var strHtml = lines.map((line, idx) => {
-
-    })
-
-    document.querySelector('.txts-editor').innerHTML = strHtml.join(' ');
-
+function onDeleteLine() {
+    deleteLine()
+    document.querySelector('.txt-input').value = '';
+    renderCanvas()
 }
 
 function newTxtBtnClicked() {
@@ -197,4 +199,47 @@ function renderImgs(imgs) {
     })
 
     document.querySelector('.gallery').innerHTML = strHtml.join(' ');
+}
+
+
+function onCanvasDown(ev) {
+    const { offsetX, offsetY } = ev;
+    var meme = getMeme()
+    gIsMouseDown = true;
+
+    meme.lines.map((line, idx) => {
+        let width = gCtx.measureText(line.txt).width;
+        let height = line.size;
+
+        if (offsetX >= line.x - (width / 2) &&
+            offsetX <= line.x + (width / 2) &&
+            offsetY >= line.y - (height / 2) &&
+            offsetY <= line.y + (height / 2)) {
+
+            setLineIdx(idx);
+            document.querySelector('.txt-input').value = line.txt;
+
+        }
+    })
+}
+
+
+function onCanvasUp() {
+    gIsMouseDown = false;
+}
+
+
+function onCanvasMove(ev) {
+    if (!gIsMouseDown) return;
+    const { offsetX, offsetY } = ev;
+    var { movementX, movementY } = ev;
+
+
+    var newPosX = offsetX + movementX;
+    var newPosY = offsetY + movementY;
+
+    var meme = getMeme()
+
+    setNewLinePos(meme.lines[meme.selectedLineIdx], newPosX, newPosY)
+    renderCanvas()
 }

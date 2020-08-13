@@ -9,55 +9,69 @@
 </head>
 
 <body onload="init()">
-<div class="main-grid">
-    <header class="main-header flex space-between">
-        <h1>Meme Generator</h1>
-        <nav class="main-nav flex space-between">
-            <ul class="main-nav flex space-between clean-list align-center">
-                <li class="nav-gallery"><a href="">gallery</a></li>
-                <li class="my-memes"><a href="">my-memes</a></li>
-                <li class="about"><a href="">about</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="main-grid">
+        <header class="main-header flex space-between">
+            <h1 class="logo">meme<span>gen</span></h1>
+            <nav class="main-nav flex space-around">
+                <ul class="main-nav flex space-around clean-list align-center">
+                    <li class="nav-gallery" onclick="toggleView()">gallery</li>
+                    <li class="my-memes" onclick="onMyMemes()">my-memes</li>
+                    <li class="about">about</li>
+                </ul>
+            </nav>
+        </header>
 
-    <main>
-        <section class="gallery grid-container">
-            <!-- js render -->
-        </section>
+        <main>
+            <section class="gallery grid-container">
+                <!-- js render -->
+            </section>
 
-        <section class="meme-container flex column hidden">
-            <button onclick="toggleView()">
-                <i class="fas fa-times"></i> Back to Gallery
-            </button>
+            <!-- <section class="meme-container flex column hidden"> -->
 
-            <div class="meme-control flex space-around">
-                <canvas id="meme-canvas" width="400" height="400"></canvas>
+            <div class="meme-container meme-control flex space-around hidden">
+                <canvas id="meme-canvas" width="400" height="400" onmousedown="onCanvasDown(event)" onmouseup="onCanvasUp(event)" onmousemove="onCanvasMove(event)"></canvas>
 
                 <div class="txt-editor flex column space-between">
-                    <input class="txt-input" type="text" data-key="txt" placeholder="Write your text here" oninput="onEditTxt(this)">
-                    <button class="add-line" onclick="onAddLine()">+</button>
-                    <button class="switch-line" onclick="onSwitchLine()">switch line</button>
-                    <div class="text-edit-container">
-                        <!-- <button onclick="deleteTxt()"><i class="fas fa-eraser"></i></button> -->
-                         <input type="range" value="40" min="10" step="2"
-                            data-key="size" oninput="onEditTxt(this)">
-                        <input type="color" value="" data-key="color" oninput="onEditTxt(this)">
+                    <input class="txt-input" type="text" data-key="txt" placeholder="Write your text here"
+                        oninput="onEditTxt(this)">
 
-                        <select data-key="fontFamily" oninput="onEditTxt(this)">
+                        <!-- <div class="btns-font-container flex column space-between"> -->
+                    <div class="upper-btns flex row justify-center">
+                        <button class="add-line" onclick="onAddLine()"><i class="fas fa-plus"></i></button>
+                        <button class="switch-line" onclick="onSwitchLine()"><i class="fas fa-long-arrow-alt-up"></i><i
+                                class="fas fa-long-arrow-alt-down"></i></button>
+                        <button class="delete" onclick="onDeleteLine()"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                    <div class="text-edit-grid">
+                        <!-- <button onclick="deleteTxt()"><i class="fas fa-eraser"></i></button> -->
+                        <input class="size-edit " type="range" value="40" min="10" step="2" data-key="size"
+                            oninput="onEditTxt(this)">
+
+                        <!-- <img src="icons/icn-color-palette.png" alt="tex"> -->
+                        <input class="color-edit" type="color" value="#ffffff" data-key="color"
+                            oninput="onEditTxt(this)">
+                        <select class="font-select" data-key="fontFamily" oninput="onEditTxt(this)">
                             <option value="Impact">Impact</option>
                             <option value="Tahoma">Tahoma</option>
                             <option value="Ariel">Ariel</option>
                             <option value="Verdana">Verdana</option>
                         </select>
-                        <select data-key="align" oninput="onEditTxt(this)">
+                        <select class="position-select" data-key="align" oninput="onEditTxt(this)">
                             <option value="left">left</option>
                             <option value="center">center</option>
                             <option value="right">right</option>
                         </select>
+
+                        <!-- <input id="outline" type="checkbox" data-key="isOutline" checked onclick="onEditTxt(this)"> -->
+
+                        <input class="strike-width" type="number" value="" min="0" step="1" data-key="lineWidth"
+                            oninput="onEditTxt(this)">
+                        <input class="strike-color" type="color" value="" data-key="strokeStyle"
+                            oninput="onEditTxt(this)">
+
                     </div>
                     <!-- <i class="fas fa-text-height"></i> -->
-                    <div class="position-container"> position
+                    <!-- <div class="position-container"> position
                         <div class="width-selection"> position-X
                             <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">+</button>
                             <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">-</button>
@@ -65,18 +79,10 @@
                         <div class="height-selection"> position-Y
                             <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">+</button>
                             <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">-</button>
-                        </div>
+                        </div> -->
 
-                       
-                    </div>
 
-                    <div>
-                        <input id="outline" type="checkbox" data-key="isOutline" checked onclick="onEditTxt(this)">
-                        <label for="outline">Outline</label>
-                        Width: <input type="number" value="" min="0" step="1" data-key="lineWidth"
-                            oninput="onEditTxt(this)">
-                        <input type="color" value="${txt.strokeStyle}" data-key="strokeStyle" oninput="onEditTxt(this)">
-                    </div>
+                    <!-- </div> -->
                     <!-- <div>
 
                         <input id="shadow" type="checkbox" data-property="isShadow" onclick="editTxt(this)">
@@ -91,31 +97,38 @@
                     <div class="save-btns flex">
                         <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
                             <i class="fas fa-cloud-download-alt"></i> Download</a>
-                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
+                        <a href="#" class="btn" onclick="onSave()" download="my-img.jpg"><i class="far fa-save"></i>
                             Save</a>
-                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
+                        <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg"><i
+                                class="fas fa-share-alt"></i>
                             Share</a>
                     </div>
                 </div>
+                <!-- </div> -->
+
 
             </div>
+            <!-- </section> -->
+        </main>
+        <!-- <button onclick="toggleView()">
+                <i class="fas fa-times"></i> Back to Gallery
+            </button> -->
+        <footer class="flex justify-center align-center">
+            <div class="container flex column justify-center align-center">
+                <h1 class="logo">meme<span>gen</span></h1>
+                <small>Coffeerights 2020</small>
+            </div>
+        </footer>
+    </div>
+</body>
 
 
+<script src="https://kit.fontawesome.com/a7c8057fcc.js" crossorigin="anonymous"></script>
 
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            footer
-        </div>
-    </footer>
-</div>
-    <script src="https://kit.fontawesome.com/a7c8057fcc.js" crossorigin="anonymous"></script>
-
-    <script src="js/util-service.js"></script>
-    <script src="js/meme-service.js"></script>
-    <script src="js/meme-controller.js"></script>
+<script src="js/util-service.js"></script>
+<script src="js/storage-service.js"></script>
+<script src="js/meme-service.js"></script>
+<script src="js/meme-controller.js"></script>
 
 </body>
 
