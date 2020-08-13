@@ -4,8 +4,17 @@ const MEMES_KEY = 'myMemes';
 var gMeme;
 var gMemes = [];
 var gImgs = _createImgs();
+var gKeywords = {
+    'animals': 1,
+    'babies': 1,
+    'presidents': 1,
+    'men': 1,
+    'women': 1,
+    'tired':1
+}
 
 
+// ***** GET ELEMENTS FOR CONTROLLER FUNCTIONS ***** //
 
 function getImagesForDisplay() {
     return gImgs;
@@ -27,6 +36,12 @@ function getMeme() {
     return gMeme;
 }
 
+function getKeywordsForDisplay(){
+    return gKeywords;
+}
+
+// ***** EDIT LINE FUNCTIONS ***** //
+
 
 function editTxt(elInput) {
     var key = elInput.dataset.key;
@@ -36,12 +51,11 @@ function editTxt(elInput) {
         case 'select-one':
             value = elInput.options[elInput.selectedIndex].value;
             break;
-        default: 
+        default:
             value = elInput.value;
             break;
     }
     gMeme.lines[gMeme.selectedLineIdx][key] = value;
-
 }
 
 function setLineIdx(idx) {
@@ -50,16 +64,13 @@ function setLineIdx(idx) {
 
 function deleteLine() {
     gMeme.lines.splice(gMeme.selectedLineIdx, 1);
-    gMeme.selectedStckrIdx = 0;
+    gMeme.selectedLineIdx = 0;
 }
 
 function setNewLinePos(line, newX, newY) {
-    console.log("setNewLinePos -> newY", newY)
-    console.log("setNewLinePos -> newX", newX)
     line.x = newX
     line.y = newY
 }
-
 
 
 function addLine(txt = 'Enter your text here', x, y) {
@@ -67,7 +78,9 @@ function addLine(txt = 'Enter your text here', x, y) {
         txt,
         size: 40,
         align: 'center',
-        color: '#000000', 
+        color: '#ffffff',
+        strokeStyle: '#000000',
+        lineWidth: '4',
         fontFamily: 'Impact',
         x,
         y
@@ -76,10 +89,48 @@ function addLine(txt = 'Enter your text here', x, y) {
 
 }
 
-function saveMeme() {
-    gMemes.push(gMeme);
+function saveMeme(canvas) {
+    var memeToSave = {
+        id: makeId(),
+        meme: gMeme,
+        canvasData: canvas.toDataURL()
+    }
+    gMemes.push(memeToSave);
     saveToStorage(MEMES_KEY, gMemes)
 }
+
+function getSavedMemeById(savedMemeId) {
+    var savedMemeData = gMemes.find(savedMeme => {
+        if (savedMeme.id === savedMemeId) return savedMeme.meme;
+    })
+    return savedMemeData.meme;
+}
+
+function editSavedMeme(savedMeme) {
+    gMeme = savedMeme;
+}
+
+function getSavedMemes() {
+    gMemes = loadFromStorage(MEMES_KEY)
+
+    return gMemes;
+}
+
+function getMatchSearchs(value) {
+    var matchImgs = []
+
+    gImgs.map(img => {
+        img.keywords.map(keyword => {
+            if (keyword.toLowerCase().includes(value)) {
+                matchImgs.push(img);
+            }
+        })
+    })
+    return matchImgs;
+}
+
+
+// ***** CREATE FUNCTIONS *** //
 
 function _createMeme(imgId) {
     let meme = {
@@ -88,7 +139,7 @@ function _createMeme(imgId) {
         lines: []
     }
     gMeme = meme;
-    addLine('Text', 200, 70);
+    addLine('Text', 250, 70);
 };
 
 
@@ -97,19 +148,20 @@ function _createImgs() {
 
     imgs.push(
         _createImage('./img/1.jpg', ['fun']),
-        _createImage('./img/3.jpg', ['happy']),
-        _createImage('./img/4.jpg', ['happy']),
-        _createImage('./img/5.jpg', ['happy']),
+        _createImage('./img/3.jpg', ['happy', 'animals']),
+        _createImage('./img/4.jpg', ['happy', 'animals']),
+        _createImage('./img/5.jpg', ['happy', 'babies']),
         _createImage('./img/6.jpg', ['happy']),
-        _createImage('./img/7.jpg', ['happy']),
+        _createImage('./img/7.jpg', ['happy', 'babies']),
         _createImage('./img/8.jpg', ['happy']),
-        _createImage('./img/9.jpg', ['happy']),
+        _createImage('./img/9.jpg', ['happy', 'babies']),
         _createImage('./img/10.jpg', ['happy']),
         _createImage('./img/11.jpg', ['sad']));
     return imgs;
 }
 
 function _createImage(url, keywords) {
+
     return {
         id: makeId(),
         url,
@@ -117,10 +169,7 @@ function _createImage(url, keywords) {
     };
 }
 
-function downloadImg(elLink) {
-    var imgContent = gCanvas.toDataURL('image/jpeg');
-    elLink.href = imgContent
-}
+
 
 
 
@@ -132,3 +181,33 @@ function downloadImg(elLink) {
 
 //     return gImgs[imgIdx].url;
 // }
+
+
+// if (!gMemes) {
+    //     gMemes = [];
+    //     gMemes.push(
+    //         {
+    //             id: 100,
+    //             meme: {
+    //                 selectedImgId: 100,
+    //                 selectedLineIdx: 0,
+    //                 lines: [{
+    //                     txt: 'You Don\'t have saved memes yet!',
+    //                     size: 70,
+    //                     align: 'center',
+    //                     color: '#ffffff',
+    //                     strokeStyle: '#000000',
+    //                     lineWidth: '4',
+    //                     fontFamily: 'Impact',
+    //                     x: 200,
+    //                     y: 200
+
+    //                 }]
+
+    //             }
+    //         }
+    //     )
+    // }
+    // else if (gMemes[0].id === 100 && gMemes.length === 2) {
+    //     gMemes.splice(0, 1);
+    // }
