@@ -27,7 +27,7 @@
             <div class="search-bar flex align-items-center space-between">
                 <div class="search-input-container flex">
                     <input class="input-search" type="text" placeholder="Search" name="search"
-                        oninput="onSearchText(event, this, value)">
+                        oninput="onSearchText(this)">
                     <i class="fas fa-search" onclick="submitSearch()"></i>
                 </div>
                 <!-- <div class="search-words-container flex justify-space-even"> -->
@@ -38,10 +38,8 @@
 
 
             <section class="gallery grid-container">
-                <!-- js render -->
+                <!-- Gallery rendered here -->
             </section>
-
-            <!-- <section class="meme-container flex column hidden"> -->
 
             <div class="meme-container meme-control flex justify-center hidden">
                 <canvas id="meme-canvas" width="450" height="450" onmousedown="onCanvasDown(event)"
@@ -50,8 +48,6 @@
                 <div class="txt-editor flex column space-evenely">
                     <input class="txt-input" type="text" data-key="txt" placeholder="Write your text here"
                         oninput="onEditTxt(this)">
-
-                    <!-- <div class="btns-font-container flex column space-between"> -->
                     <div class="upper-btns flex row justify-center">
                         <button class="add-line" onclick="onAddLine()"><i class="fas fa-plus"></i></button>
                         <button class="switch-line" onclick="onSwitchLine()"><i class="fas fa-long-arrow-alt-up"></i><i
@@ -61,54 +57,41 @@
                     <div class="text-edit-grid">
                         <input class="size-edit " type="range" value="40" min="10" step="2" data-key="size"
                             oninput="onEditTxt(this)">
-                        <div class="color-container">
+                        <div class="color-container bg-color-container">
                             <div class="button-edit-text color-icon bg-color-btn">
-                                <img class="color-img" src="icons/icn-color-palette.png" alt="tex">
+                                <img class="color-img" src="icons/icn-color-palette.png" alt="colors-palette">
                                 <input class="color-edit color-input" type="color" value="#ffffff" data-key="color"
                                     oninput="onEditTxt(this)">
                             </div>
                         </div>
-                        <div class="color-container">
-                                <div class="button-edit-text color-icon stroke-color-btn">
-                                    <img class="color-img" src="icons/icn-stroke-color.png" alt="underline">
-                                    <input class="stroke-color color-input" type="color" value="" data-key="strokeStyle"
-                                        oninput="onEditTxt(this)">
-                                </div>
+                        <div class="color-container stroke-color-container">
+                            <div class="button-edit-text color-icon stroke-color-btn">
+                                <img class="color-img" src="icons/icn-stroke-color.png" alt="underline">
+                                <input class="stroke-color color-input" type="color" value="" data-key="strokeStyle"
+                                    oninput="onEditTxt(this)">
+                            </div>
                         </div>
                         <input class="stroke-width" type="number" value="" min="0" max="12" step="1"
-                                data-key="lineWidth" oninput="onEditTxt(this)">
+                            data-key="lineWidth" oninput="onEditTxt(this)">
 
                         <select class="font-select" data-key="fontFamily" oninput="onEditTxt(this)">
                             <option value="Impact">Impact</option>
                             <option value="Tahoma">Tahoma</option>
                             <option value="Ariel">Ariel</option>
                             <option value="Verdana">Verdana</option>
+                            <option value="Dancing">Dancing</option>
                         </select>
                     </div>
-                    <!-- <i class="fas fa-text-height"></i> -->
-                    <!-- <div class="position-container"> position
-                        <div class="width-selection"> position-X
-                            <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">+</button>
-                            <button value="50" step="5" data-key="x" oninput="onEditTxt(this)">-</button>
+
+                    <div class="stickers-main flex align-center" contenteditable="true">
+                        <div class="stickers-arrow left" onclick="onPrevSticker()"><i class="fas fa-angle-left"></i>
                         </div>
-                        <div class="height-selection"> position-Y
-                            <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">+</button>
-                            <button value="" min="0" step="5" data-key="y" oninput="onEditTxt(this)">-</button>
-                        </div> -->
+                        <div class="stickers-container flex space-around align-center"></div>
+                        <div class="stickers-arrow right" onclick="onNextSticker()"><i class="fas fa-angle-right"></i>
+                        </div>
 
+                    </div>
 
-                    <!-- </div> -->
-                    <!-- <div>
-
-                        <input id="shadow" type="checkbox" data-property="isShadow" onclick="editTxt(this)">
-                        <label for="shadow">Shadow</label>
-                        <input type="color" value="" data-property="shadowColor" oninput="editTxt(this)">
-                        <i class="fas fa-arrows-alt-h"></i> <input type="number" value="" step="1"
-                            data-property="shadowOffsetX" oninput="editTxt(this)">
-                        <i class="fas fa-arrows-alt-v"></i><input type="number" value="${txt.shadowOffsetY}" step="1"
-                            data-property="shadowOffsetY" oninput="editTxt(this)">
-                        Blur: <input type="number" value="" data-property="shadowBlur" oninput="editTxt(this)">
-                    </div> -->
                     <div class="save-btns flex">
                         <a href="#" class="btn" onclick="downloadImg(this)" download="my-img.jpg">
                             <i class="fas fa-cloud-download-alt"></i> Download</a>
@@ -117,29 +100,20 @@
                         <a href="#" class="btn" onclick="uploadImg()"><i class="fas fa-share-alt"></i>
                             Share</a>
                     </div>
+
+
                 </div>
-                <!-- </div> -->
-                <!-- 
-                <form class="flex space-between column"action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
-                    <input name="img" id="imgData" type="hidden" />
-                    <button class="btn" type="submit">Publish</button>
-                    <div class="share-container"></div>
-                </form> -->
             </div>
             <!-- </section> -->
         </main>
-        <!-- <button onclick="toggleView()">
-                <i class="fas fa-times"></i> Back to Gallery
-            </button> -->
+
         <footer class="flex justify-center align-center">
             <div class="container flex column justify-center align-center">
-                <h1 class="logo">meme<span>gen</span></h1>
+                <h2 class="logo">meme<span>gen</span></h2>
                 <small>Coffeerights 2020</small>
             </div>
         </footer>
     </div>
-    </div>
-
 
 
     <script src="https://kit.fontawesome.com/a7c8057fcc.js" crossorigin="anonymous"></script>
