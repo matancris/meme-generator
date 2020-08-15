@@ -76,7 +76,7 @@ function _createMeme(imgId) {
         stickers: gStickers
     }
     gMeme = meme;
-    addLine('Text', 250, 70);
+    addLine('Text', 225, 70);
 };
 
 function getMeme() {
@@ -137,13 +137,13 @@ function addLine(txt = 'Enter your text here', x, y) {
 // **** LOCAL STORAGE FUNCTIONS **** //
 
 function saveMeme(canvas) {
-console.log("saveMeme -> canvas", canvas)
-    
+
     var memeToSave = {
         id: makeId(),
         meme: gMeme,
-        canvasData: canvas.toDataURL()
+        canvasData: canvas.toDataURL('image/jpeg')
     }
+
     gMemes.push(memeToSave);
     saveToStorage(MEMES_KEY, gMemes)
 }
@@ -161,7 +161,7 @@ function editSavedMeme(savedMeme) {
 
 function getSavedMemes() {
     gMemes = loadFromStorage(MEMES_KEY)
-    if (!gMemes) return [];
+    if (!gMemes || gMemes.length === 0) return [];
     return gMemes;
 }
 

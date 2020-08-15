@@ -118,7 +118,7 @@ function renderMyMemes() {
     const savedMemes = getSavedMemes();
     let elGallery = document.querySelector('.gallery')
     let strHtmls = savedMemes.map(savedMeme => {
-        return `<img src="${savedMeme.canvasData}" alt="meme-img" style="position:relative"><a href="#" style="position:absolute; width:100%; height: 100%;" class="btn" onclick="downloadImg(this)" download="my-img.jpg"></a></img>`
+        return `<img src="${savedMeme.canvasData}" alt="meme-img" style="position:relative" onclick="onEditSaveMeme('${savedMeme.id}')"></img>`
     });
     elGallery.innerHTML = strHtmls.join('');
 }
@@ -161,13 +161,23 @@ function uploadImg() {
 
 function renderCanvas() {
     const meme = getMeme();
+    var currImg = getImgById(meme.selectedImgId)
     const drawedStcs = getDrawedStickers();
-    const chosenImg = document.getElementById(meme.selectedImgId)
-    gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
-    meme.lines.map(line => drawTxt(line))
-
-    drawedStcs.map(sticker => drawSticker(sticker))
+    // const chosenImg = document.getElementById(meme.selectedImgId)
+     const chosenImg = new Image();
+     chosenImg.onload = () => {
+        gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
+        meme.lines.map(line => drawTxt(line))
+        drawedStcs.map(sticker => drawSticker(sticker))
+    }
+    chosenImg.src = currImg.url;
 }
+
+    // gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
+    // meme.lines.map(line => drawTxt(line))
+
+    // drawedStcs.map(sticker => drawSticker(sticker))
+// }
 
 function onCanvasDown(ev) {
     const { offsetX, offsetY } = ev;
@@ -197,14 +207,13 @@ function onCanvasDown(ev) {
         let width = 80;
         let height = 80;
 
-
-        if (offsetX >= sticker.x - (width / 2) &&
-            offsetX <= sticker.x + (width / 2) &&
-            offsetY >= sticker.y - (height / 2) &&
-            offsetY <= sticker.y + (height / 2)) {
+        if (offsetX >= sticker.x &&
+            offsetX <= sticker.x + width &&
+            offsetY >= sticker.y &&
+            offsetY <= sticker.y + height) {
             gIsStickerSelected = true
             setStickerId(sticker.id);
-            drawSelectionRect()
+            // drawSelectionRect()
         }
         else {
             gIsStickerSelected = false;
@@ -342,14 +351,21 @@ function onSearchText(elSearch) {
 //**** FUNCTIONS FOR UPDATE IN FUTURE ****//
 
 
-// function onMySavedMemes(){
-//     var memes = getSavedMemes();
-//     memes.map(meme => {
-//         img = getImgById(meme.selectedImgId);
-//         gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
-//         meme.lines.map(line => drawTxt(line))
-//         //  `
-//         // <div class="img-container"><img id='${img.id}' src='${img.url}' onclick="onOpenMemeEditor('${img.id}',this)" alt='meme picture'/></div>
-//         // `  
-//     })
-// }
+function onMySavedMemes() {
+    var memes = getSavedMemes();
+    memes.map(meme => {
+        img = getImgById(meme.selectedImgId);
+        gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
+        meme.lines.map(line => drawTxt(line))
+            `
+        <div class="img-container"><img id='${img.id}' src='${img.url}' onclick="onOpenMemeEditor('${img.id}',this)" alt='meme picture'/></div>
+        `
+    })
+}
+
+function onEditSaveMeme(savedMemeId) {
+    const savedMeme = getSavedMemeById(savedMemeId);
+    editSavedMeme(savedMeme);
+    renderCanvas()
+    toggleView()
+}

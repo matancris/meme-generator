@@ -498,9 +498,14 @@ body.opened .search-words {
         justify-content: center;
         align-items: center;
     }
+    .logo {
+        font-size: 3rem;
+    }
     #meme-canvas {
         width: 350px;
         height: 350px;
+        margin-bottom: 20px;
+        margin-top: 10px;
     }
     .main-nav {
         flex-direction: row;
@@ -509,7 +514,10 @@ body.opened .search-words {
         width: 100%;
     }
     .txt-editor {
-        width: 100%;
+        width: 90%;
+    }
+    .txt-editor>* {
+        margin-bottom: 10px;
     }
 }
 
