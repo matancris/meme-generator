@@ -16,7 +16,6 @@
                 <ul class="main-nav flex space-around clean-list align-center">
                     <li class="nav-gallery" onclick="onGallery()">gallery</li>
                     <li class="my-memes" onclick="onMyMemes()">memes</li>
-                    <li class="about">about</li>
                 </ul>
             </nav>
 
@@ -26,9 +25,8 @@
 
             <div class="search-bar flex align-items-center space-between">
                 <div class="search-input-container flex">
-                    <input class="input-search" type="text" placeholder="Search" name="search"
+                    <input class="input-search" type="search" placeholder="Search" name="search"
                         oninput="onSearchText(this)">
-                    <i class="fas fa-search" onclick="submitSearch()"></i>
                 </div>
                 <!-- <div class="search-words-container flex justify-space-even"> -->
                 <div class="search-words flex space-around">
@@ -43,7 +41,7 @@
 
             <div class="meme-container meme-control flex justify-center hidden">
                 <canvas id="meme-canvas" width="450" height="450" onmousedown="onCanvasDown(event)"
-                    onmouseup="onCanvasUp(event)" onmousemove="onCanvasMove(event)"></canvas>
+                ontouchstart="onCanvasDown(event)" ontouchend="onCanvasUp(event)" onmousemove="onCanvasMove(event)" onmouseup="onCanvasUp(event)" ontouchmove="onCanvasMove(event)"></canvas>
 
                 <div class="txt-editor flex column space-evenely">
                     <input class="txt-input" type="text" data-key="txt" placeholder="Write your text here"
@@ -100,11 +98,15 @@
                         <a href="#" class="btn" onclick="uploadImg()"><i class="fas fa-share-alt"></i>
                             Share</a>
                     </div>
-
-
+                    
                 </div>
+                        <div onclick=event.stopPropagation() class="modal flex align-center column hidden">
+                            <h3>You'r new meme is saved! Redirecting to saved memes page...</h3>
+                        </div>
             </div>
-            <!-- </section> -->
+
+
+
         </main>
 
         <footer class="flex justify-center align-center">

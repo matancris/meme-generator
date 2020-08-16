@@ -67,7 +67,7 @@ function _createImage(url, keywords) {
 
 // ***** MEME FUNCTIONS ***** //
 
-function _createMeme(imgId) {
+function _createMeme(imgId, canvasWidth) {
     let meme = {
         selectedImgId: imgId,
         selectedLineIdx: 0,
@@ -78,7 +78,7 @@ function _createMeme(imgId) {
         canvasHeight : null
     }
     gMeme = meme;
-    addLine('Text', 225, 70);
+    addLine('Text', canvasWidth / 2, 70);
 };
 
 function getMeme() {
@@ -115,9 +115,9 @@ function deleteLine() {
     gMeme.selectedLineIdx = 0;
 }
 
-function setNewLinePos(line, newX, newY) {
-    line.x = newX
-    line.y = newY
+function setNewLinePos(newX, newY) {
+    gMeme.lines[gMeme.selectedLineIdx].x = newX
+    gMeme.lines[gMeme.selectedLineIdx].y = newY
 }
 
 function addLine(txt = 'Enter your text here', x, y) {

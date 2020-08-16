@@ -15,10 +15,15 @@ function init() {
     var imgs = getImagesForDisplay()
     renderImgs(imgs);
     renderKeywords()
+    if (window.innerWidth <= 550) {
+        gCanvas.width = 350;
+        gCanvas.height = 350;
+    }
 }
 
 function onOpenMemeEditor(imgId) {
-    _createMeme(imgId)
+
+    _createMeme(imgId , gCanvas.width)
     updateDrawedStickers('init')
     renderCanvas();
     renderStickers();
@@ -135,6 +140,17 @@ function renderMyMemes() {
 
 function onSave() {
     saveMeme(gCanvas)
+    saveModalOpen()
+
+}
+
+function saveModalOpen() {
+    var elModal = document.querySelector('.modal');
+    elModal.classList.toggle('hidden')
+    setTimeout(() => {
+        document.querySelector('.modal').classList.toggle('hidden');
+        onMyMemes()
+    }, 3000)
 }
 
 function downloadImg(elLink) {
@@ -169,7 +185,7 @@ function uploadImg() {
 
 function renderCanvas() {
     const meme = getMeme();
-    var currImg = getImgById(meme.selectedImgId)
+    const currImg = getImgById(meme.selectedImgId)
     const drawedStcs = getDrawedStickers();
     // const chosenImg = document.getElementById(meme.selectedImgId)
     const chosenImg = new Image();
@@ -182,9 +198,14 @@ function renderCanvas() {
 }
 
 function onCanvasDown(ev) {
-    const { offsetX, offsetY } = ev;
-    var meme = getMeme()
-    var drawedStcs = getDrawedStickers()
+    let { offsetX, offsetY } = ev;
+    if (ev.type === "touchmove") {
+        ev.preventDefault();
+        offsetX = ev.targetTouches[0].pageX - 65; // Fix the patch
+        offsetY = ev.targetTouches[0].pageY - 115; // Fix the patch
+    }
+    const meme = getMeme()
+    const drawedStcs = getDrawedStickers()
     gIsMouseDown = true;
 
     meme.lines.map((line, idx) => {
@@ -223,25 +244,31 @@ function onCanvasDown(ev) {
     })
 }
 
-function onCanvasUp() {
+function onCanvasUp(ev) {
+    console.log(ev);
     gIsMouseDown = false;
     drawSelectionRect()
 }
+var gIsTouch = false
 
 function onCanvasMove(ev) {
     if (!gIsMouseDown && !gIsLineSelected && !gIsStickerSelected) return;
-    const { offsetX, offsetY, movementX, movementY } = ev;
-    var newPosX = offsetX + movementX;
-    var newPosY = offsetY + movementY;
-    var meme = getMeme()
+    let { offsetX, offsetY} = ev;
+    if (ev.type === "touchmove") {
+        ev.preventDefault();
+        offsetX = ev.targetTouches[0].pageX - 65; // Fix the patch
+        offsetY = ev.targetTouches[0].pageY - 115; // Fix the patch
+    }
 
+    var meme = getMeme()
     if (gIsLineSelected && gIsMouseDown) {
-        setNewLinePos(meme.lines[meme.selectedLineIdx], newPosX, newPosY)
+        setNewLinePos(offsetX, offsetY)
+        renderCanvas()
     }
     else if (gIsStickerSelected && gIsMouseDown) {
-        setNewStcPos(meme.selectedStcId, newPosX, newPosY)       
+        setNewStcPos(meme.selectedStcId, offsetX, offsetY)
+        renderCanvas()
     }
-    renderCanvas()
 }
 
 
@@ -262,7 +289,7 @@ function drawSelectionRect() {
     }
     else if (gIsStickerSelected) {
         let sticker = getDrawedStickerById(meme.selectedStcId)
-        rectW = rectH = sticker.size + 5;
+        rectW = rectH = +sticker.size + 5;
         rectX = sticker.x;
         rectY = sticker.y;
     }
@@ -288,13 +315,13 @@ function renderKeywords() {
         <div class="keyword" onclick="onSelectWord('${key}')" style="font-size: ${fontSize};">${key}</div>
         `
     }
-
     document.querySelector('.search-words').innerHTML = strHTML;
 }
 
-function onSelectWord(ward) {
-    var matchImgs = getMatchSearchs(ward)
-    updateWardsMap(ward)
+function onSelectWord(word) {
+    var matchImgs = getMatchSearchs(word)
+    updateWardsMap(word)
+    document.querySelector('.input-search').value = word;
     renderKeywords()
     renderImgs(matchImgs)
 }
