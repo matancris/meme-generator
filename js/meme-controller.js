@@ -41,6 +41,7 @@ function toggleView(page) {
         document.querySelector('.gallery').classList.remove('hidden');
         document.querySelector('.search-bar').classList.remove('hidden');
     }
+    // editor page:
     else {
         document.querySelector('.meme-container').classList.remove('hidden');
         document.querySelector('.gallery').classList.add('hidden');
@@ -87,9 +88,16 @@ function onAddLine() {
 }
 
 function onEditTxt(elInput) {
-    editTxt(elInput)
+    if (elInput.dataset.key === 'size') {
+        if (gIsLineSelected) editTxt(elInput);
+        else if (gIsStickerSelected) resizeSticker(elInput);
+    }
+    else editTxt(elInput);
+    console.log(elInput.value)
     renderCanvas()
+    drawSelectionRect()
 }
+
 
 function drawTxt(line) {
     gCtx.beginPath();
@@ -164,20 +172,14 @@ function renderCanvas() {
     var currImg = getImgById(meme.selectedImgId)
     const drawedStcs = getDrawedStickers();
     // const chosenImg = document.getElementById(meme.selectedImgId)
-     const chosenImg = new Image();
-     chosenImg.onload = () => {
+    const chosenImg = new Image();
+    chosenImg.onload = () => {
         gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
         meme.lines.map(line => drawTxt(line))
         drawedStcs.map(sticker => drawSticker(sticker))
     }
     chosenImg.src = currImg.url;
 }
-
-    // gCtx.drawImage(chosenImg, 0, 0, gCanvas.width, gCanvas.height);
-    // meme.lines.map(line => drawTxt(line))
-
-    // drawedStcs.map(sticker => drawSticker(sticker))
-// }
 
 function onCanvasDown(ev) {
     const { offsetX, offsetY } = ev;
@@ -191,8 +193,8 @@ function onCanvasDown(ev) {
 
         if (offsetX >= line.x - (width / 2) &&
             offsetX <= line.x + (width / 2) &&
-            offsetY >= line.y - (height / 2) &&
-            offsetY <= line.y + (height / 2)) {
+            offsetY >= line.y - height &&
+            offsetY <= line.y) {
             gIsLineSelected = true;
             setLineIdx(idx);
             drawSelectionRect()
@@ -213,52 +215,57 @@ function onCanvasDown(ev) {
             offsetY <= sticker.y + height) {
             gIsStickerSelected = true
             setStickerId(sticker.id);
-            // drawSelectionRect()
+            drawSelectionRect()
         }
         else {
             gIsStickerSelected = false;
         }
-
     })
 }
 
 function onCanvasUp() {
     gIsMouseDown = false;
-    gIsLineSelected = false;
-    gIsStickerSelected = false;
+    drawSelectionRect()
 }
 
 function onCanvasMove(ev) {
     if (!gIsMouseDown && !gIsLineSelected && !gIsStickerSelected) return;
-    const { offsetX, offsetY } = ev;
-    var { movementX, movementY } = ev;
+    const { offsetX, offsetY, movementX, movementY } = ev;
     var newPosX = offsetX + movementX;
     var newPosY = offsetY + movementY;
     var meme = getMeme()
 
-    if (gIsLineSelected) {
+    if (gIsLineSelected && gIsMouseDown) {
         setNewLinePos(meme.lines[meme.selectedLineIdx], newPosX, newPosY)
-        renderCanvas()
-        drawSelectionRect()
     }
-    else if (gIsStickerSelected) {
-        setNewStcPos(meme.selectedStcId, newPosX, newPosY)
-        renderCanvas()
+    else if (gIsStickerSelected && gIsMouseDown) {
+        setNewStcPos(meme.selectedStcId, newPosX, newPosY)       
     }
-
+    renderCanvas()
 }
 
 
 function drawSelectionRect() {
     var meme = getMeme()
-    let line = meme.lines[meme.selectedLineIdx];
+    let rectH = 0
+    let rectW = 0
+    let rectX = 0
+    let rectY = 0
 
-    gCtx.font = (line.size + 'px ' + line.font);
-    let rectW = gCtx.measureText(line.txt).width + 15;
-    let rectH = +line.size + 5;
-    let rectX = line.x - (rectW / 2);
-    let rectY = line.y - line.size;
-
+    if (gIsLineSelected) {
+        let line = meme.lines[meme.selectedLineIdx];
+        gCtx.font = (line.size + 'px ' + line.font);
+        rectW = gCtx.measureText(line.txt).width + 15;
+        rectH = +line.size + 5;
+        rectX = line.x - (rectW / 2);
+        rectY = line.y - line.size;
+    }
+    else if (gIsStickerSelected) {
+        let sticker = getDrawedStickerById(meme.selectedStcId)
+        rectW = rectH = sticker.size + 5;
+        rectX = sticker.x;
+        rectY = sticker.y;
+    }
 
     gCtx.beginPath();
     gCtx.rect(rectX, rectY, rectW, rectH);
@@ -303,7 +310,8 @@ function onAddSticker(stickerId) {
     var sticker = getStickerById(stickerId)
     var x = gCanvas.width / 2;
     var y = gCanvas.height / 2;
-    updateDrawedStickers(sticker)
+    updateDrawedStickers(sticker);
+    setStickerId(sticker.id);
     setStickerPos(sticker, x, y);
     drawSticker(sticker)
 }
@@ -311,7 +319,7 @@ function onAddSticker(stickerId) {
 function drawSticker(sticker) {
     const img = new Image();
     img.onload = () => {
-        gCtx.drawImage(img, sticker.x, sticker.y, 80, 80);;
+        gCtx.drawImage(img, sticker.x, sticker.y, sticker.size, sticker.size);;
     }
     img.src = sticker.url;
 }
@@ -329,10 +337,13 @@ function onNextSticker() {
     goNextSticker();
     renderStickers();
 }
+
 function onPrevSticker() {
     goPrevSticker()
     renderStickers();
 }
+
+
 
 // *****SEARCH FUNCTIONS***** //
 

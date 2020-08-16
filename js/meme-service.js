@@ -73,7 +73,9 @@ function _createMeme(imgId) {
         selectedLineIdx: 0,
         selectedStcId: '',
         lines: [],
-        stickers: gStickers
+        stickers: gStickers,
+        canvasWidth : null,
+        canvasHeight : null
     }
     gMeme = meme;
     addLine('Text', 225, 70);
@@ -189,17 +191,12 @@ function getKeywordsForDisplay() {
     return gKeywords;
 }
 
-// ***** STICKERS FUNCTIONS *** //
-
-
-
 
 // ***** STICKERS FUNCTIONS ***** //
 
 function getStickersForDisplay() {
     var startIdx = 0;
     var stickers = gStickers;
-
     return stickers.slice(startIdx, startIdx + 4);
 }
 
@@ -254,12 +251,12 @@ function _createStickers() {
     var stickers = [];
 
     stickers.push(
-        _createSticker('./stickers/1.svg'),
-        _createSticker('./stickers/2.svg'),
-        _createSticker('./stickers/3.svg'),
-        _createSticker('./stickers/4.svg'),
-        _createSticker('./stickers/5.svg'),
-        _createSticker('./stickers/6.svg'),
+        _createSticker('./sticker/1.svg'),
+        _createSticker('./sticker/2.svg'),
+        _createSticker('./sticker/3.svg'),
+        _createSticker('./sticker/4.svg'),
+        _createSticker('./sticker/5.svg'),
+        _createSticker('./sticker/6.svg'),
         // _createSticker(url),
         // _createSticker(url),
         // _createSticker(url)
@@ -272,13 +269,33 @@ function _createSticker(url) {
     return {
         id: makeId(),
         url,
+        size: 80,
         x: 50,
         y: 50
     }
 }
 
+function resizeSticker(elInput){
+    var sticker = getDrawedStickerById(gMeme.selectedStcId);
+    sticker.size = elInput.value;
+}
+
+function getDrawedStickerById(sticketId){
+    return gDrawedStcs.find(sticker => {
+        return sticker.id === sticketId;
+    })
+}
 
 // **** FUNCTIONS TO UPDATE IN FUTURE **** //
+
+function setCanvasSize(width, height) {
+    gMeme.canvasWidth = 450;
+    var ratio = gMeme.canvasWidth / width;
+    gMeme.canvasHeight = height * ratio;
+}
+
+// +++ gMeme addgMeme.canvasW gMeme.canvasH
+
 
 // function getImgSrc() {
 //     // imgIdx needed to find img src url in gImg[]

@@ -6,22 +6,22 @@
 
 @font-face {
     font-family: Impact;
-    src: url(../fonts/impact.ttf);
+    src: url(../font/impact.ttf);
 }
 
 @font-face {
     font-family: Pangolin;
-    src: url(../fonts/Pangolin-Regular.ttf);
+    src: url(../font/Pangolin-Regular.ttf);
 }
 
 @font-face {
     font-family: Parisienne;
-    src: url(../fonts/Parisienne-Regular.ttf);
+    src: url(../font/Parisienne-Regular.ttf);
 }
 
 @font-face {
     font-family: Dancing;
-    src: url(../fonts/DancingScript-Regular.ttf);
+    src: url(../font/DancingScript-Regular.ttf);
 }
 
 /* BASE */
