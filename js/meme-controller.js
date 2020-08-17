@@ -15,14 +15,18 @@ function init() {
     var imgs = getImagesForDisplay()
     renderImgs(imgs);
     renderKeywords()
+
+}
+
+function onOpenMemeEditor(imgId) {
     if (window.innerWidth <= 550) {
         gCanvas.width = 350;
         gCanvas.height = 350;
     }
-}
-
-function onOpenMemeEditor(imgId) {
-
+    else{
+        gCanvas.width = 450;
+        gCanvas.height = 450;
+    }
     _createMeme(imgId , gCanvas.width)
     updateDrawedStickers('init')
     renderCanvas();
@@ -98,7 +102,6 @@ function onEditTxt(elInput) {
         else if (gIsStickerSelected) resizeSticker(elInput);
     }
     else editTxt(elInput);
-    console.log(elInput.value)
     renderCanvas()
     drawSelectionRect()
 }
@@ -141,7 +144,6 @@ function renderMyMemes() {
 function onSave() {
     saveMeme(gCanvas)
     saveModalOpen()
-
 }
 
 function saveModalOpen() {
@@ -199,10 +201,11 @@ function renderCanvas() {
 
 function onCanvasDown(ev) {
     let { offsetX, offsetY } = ev;
-    if (ev.type === "touchmove") {
+    if (ev.type === "touchstart") {
         ev.preventDefault();
-        offsetX = ev.targetTouches[0].pageX - 65; // Fix the patch
-        offsetY = ev.targetTouches[0].pageY - 115; // Fix the patch
+        offsetX = ev.targetTouches[0].pageX - ev.target.offsetLeft;
+        offsetY = ev.targetTouches[0].pageY - ev.target.offsetTop;
+        // gIsTouchOn = true;
     }
     const meme = getMeme()
     const drawedStcs = getDrawedStickers()
@@ -245,23 +248,22 @@ function onCanvasDown(ev) {
 }
 
 function onCanvasUp(ev) {
-    console.log(ev);
     gIsMouseDown = false;
     drawSelectionRect()
 }
-var gIsTouch = false
+
 
 function onCanvasMove(ev) {
     if (!gIsMouseDown && !gIsLineSelected && !gIsStickerSelected) return;
     let { offsetX, offsetY} = ev;
     if (ev.type === "touchmove") {
         ev.preventDefault();
-        offsetX = ev.targetTouches[0].pageX - 65; // Fix the patch
-        offsetY = ev.targetTouches[0].pageY - 115; // Fix the patch
+        offsetX = ev.targetTouches[0].pageX - ev.target.offsetLeft;
+        offsetY = ev.targetTouches[0].pageY - ev.target.offsetTop;
     }
 
     var meme = getMeme()
-    if (gIsLineSelected && gIsMouseDown) {
+    if (gIsLineSelected && gIsMouseDown ) {
         setNewLinePos(offsetX, offsetY)
         renderCanvas()
     }

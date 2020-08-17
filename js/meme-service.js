@@ -3,6 +3,7 @@
 // ***** GLOBAL VARIABELS ***** //
 
 const MEMES_KEY = 'myMemes';
+const IMGS_KEY = 'myImgs';
 var gMeme;
 var gMemes = [];
 var gImgs = _createImgs();
@@ -148,6 +149,7 @@ function saveMeme(canvas) {
 
     gMemes.push(memeToSave);
     saveToStorage(MEMES_KEY, gMemes)
+    saveToStorage(IMGS_KEY, gImgs)
 }
 
 function getSavedMemeById(savedMemeId) {
@@ -163,6 +165,7 @@ function editSavedMeme(savedMeme) {
 
 function getSavedMemes() {
     gMemes = loadFromStorage(MEMES_KEY)
+    gImgs = loadFromStorage(IMGS_KEY);
     if (!gMemes || gMemes.length === 0) return [];
     return gMemes;
 }

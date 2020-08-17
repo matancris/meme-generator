@@ -393,7 +393,6 @@ body.opened .search-words {
 /* MODAL */
 
 .modal {
-    box-sizing: border-box;
     justify-content: space-between;
     position: absolute;
     width: 45rem;
@@ -536,6 +535,13 @@ body.opened .search-words {
     }
     .txt-editor>* {
         margin-bottom: 10px;
+    }
+    .modal{
+        width: 25rem;
+        height: 12rem;
+        font-size: 1.7rem;
+        top: 30px;
+        left: 10px
     }
 }
 
